@@ -17,11 +17,21 @@ import sqlite3
 def say_hello(name):
    print("Hello, " + name + "!")
    return 42
- 
+
+
 @anvil.server.callable
 def get_jugendherbergen(row="*"):
-  conn = sqlite3.connect(data_files['jugendherberge_verwaltung.db'])
+  conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
   cursor = conn.cursor()
   res = list(cursor.execute(f"SELECT {row} FROM jugendherbergen"))
   print(res)
   return res
+  
+@anvil.server.callable
+def get_zimmer_for_jugendherberge(jid, columns="*"):
+  conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
+  cursor = conn.cursor()
+  res = list(cursor.execute(f"SELECT {columns} FROM zimmer WHERE JID={int(jid)}"))
+  print(res)
+  return res
+  
