@@ -21,7 +21,7 @@ class Startseite(StartseiteTemplate):
 
   def drop_down_City_change(self, **event_args):
     """This method is called when an item is selected"""
-    jid = self.drop_down_1.items[self.drop_down_1.selected_value -1 ][1]
+    jid = self.drop_down_.items[self.drop_down_1.selected_value -1 ][1]
     print(jid)
     zimmer_item = anvil.server.call("get_zimmer_for_jugendherberge", jid)
     
