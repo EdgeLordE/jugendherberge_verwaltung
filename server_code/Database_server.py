@@ -27,20 +27,18 @@ def get_jugendherbergen(row="*"):
   return res
   
 @anvil.server.callable
-def get_zimmer_for_jugendherberge(jid, columns="*"):
+def get_zimmer_for_jugendherberge(jid):
   conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
   cursor = conn.cursor()
   res = list(cursor.execute(
         f"""
-        SELECT 
-            'Zimmernummer: ' || zimmernummer || ', ' ||
-            'Bettenanzahl: ' || bettenanzahl || ', ' ||
-            'Preis/Nacht: ' || preis_pro_nacht || ', ' ||
-            ZID 
+        SELECT  'Zimmernummer: ' || zimmernummer || ', ' || 'Bettenanzahl: ' || bettenanzahl || ', ' || 'Preis/Nacht: ' || preis_pro_nacht as deteils, 
+        ZID 
         FROM zimmer 
         WHERE JID = {int(jid)}
         """
     ))
+  print(res)
   return res
 
 @anvil.server.callable

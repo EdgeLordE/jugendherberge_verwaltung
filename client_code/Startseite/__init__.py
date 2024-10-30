@@ -18,9 +18,9 @@ class Startseite(StartseiteTemplate):
     self.current_user = [self.drop_down_User.items[self.drop_down_User.selected_value - 1][0], self.drop_down_User.selected_value]
     self.current_pricecategorie = [self.drop_down_PriceCategorie.items[self.drop_down_PriceCategorie.selected_value - 1][0], self.drop_down_PriceCategorie.selected_value]
     self.current_City = [self.drop_down_City.items[self.drop_down_City.selected_value - 1][0], self.drop_down_City.selected_value]
-
+    print(self.current_City)
     self.drop_down_MoreUser.items = anvil.server.call('get_More_user', self.current_user[0])
-    #self.drop_down_Room.items = anvil.server.call('get_zimmer_for_jugendherberge', self.current_City[1]+1)
+    self.drop_down_Room.items = anvil.server.call('get_zimmer_for_jugendherberge', self.current_City[1])
 
     self.start_date_check = False
     self.end_date_check = False
@@ -47,6 +47,8 @@ class Startseite(StartseiteTemplate):
     """This method is called when the selected date changes"""
     if len(str(self.date_picker_StartDate.date)) == 10:
       self.start_date_check = True
+      if self.end_date_check == True:
+        pass
     else:
       self.end_date_check = False
     print(self.start_date_check)
@@ -55,6 +57,8 @@ class Startseite(StartseiteTemplate):
     """This method is called when the selected date changes"""
     if len(str(self.date_picker_EndDate.date)) == 10:
       self.end_date_check = True
+      if self.start_date_check == True:
+        pass
     else:
       self.end_date_check = False
     print(self.end_date_check)
