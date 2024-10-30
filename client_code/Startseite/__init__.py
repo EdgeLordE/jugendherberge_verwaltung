@@ -10,19 +10,36 @@ class Startseite(StartseiteTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
- 
-    # Any code you write here will run before the form opens.
-    self.drop_down_City.items = [("Feldkirch", 0), ("Mordor", 1)]
-    print(anvil.server.call("say_hello", "sauron"))
- 
-    self.drop_down_City.items = anvil.server.call("get_jugendherbergen", "name, JID")
 
-    
+    # Any code you write here will run before the form opens.
+    self.drop_down_City.items = anvil.server.call("get_jugendherbergen", "name, JID")
+    self.drop_down_User.items = anvil.server.call('get_Gast')
+    self.drop_down_PriceCategorie.items = anvil.server.call('get_Preiskategorie')
+    self.current_user = [self.drop_down_User.items[self.drop_down_User.selected_value - 1][0], self.drop_down_User.selected_value]
+    self.current_pricecategorie = [self.drop_down_PriceCategorie.items[self.drop_down_PriceCategorie.selected_value - 1][0], self.drop_down_PriceCategorie.selected_value]
+    self.current_City = [self.drop_down_City.items[self.drop_down_City.selected_value - 1][0], self.drop_down_City.selected_value]
+
+    self.drop_down_MoreUser.items = anvil.server.call('get_More_user', self.current_user[0])
+    self.drop_down_Room.items = anvil.server.call('get_zimmer_for_jugendherberge', self.current_City[1]+1)
 
   def drop_down_City_change(self, **event_args):
     """This method is called when an item is selected"""
-    jid = self.drop_down_.items[self.drop_down_1.selected_value -1 ][1]
-    print(jid)
-    zimmer_item = anvil.server.call("get_zimmer_for_jugendherberge", jid)
+    self.current_City = [self.drop_down_City.items[self.drop_down_City.selected_value - 1][0], self.drop_down_City.selected_value]
+    self.drop_down_Room.items = anvil.server.call('get_zimmer_for_jugendherberge', self.current_City[1]+1)
+    print(self.current_City)
+  
+  def drop_down_User_change(self, **event_args):
+    """This method is called when an item is selected"""
+    self.current_user = [self.drop_down_User.items[self.drop_down_User.selected_value - 1][0], self.drop_down_User.selected_value]
+    self.drop_down_MoreUser.items = anvil.server.call('get_More_user', self.current_user[0])
+    print(self.current_user)
+
+  def drop_down_PriceCategorie_change(self, **event_args):
+    """This method is called when an item is selected"""
+    self.current_pricecategorie = [self.drop_down_PriceCategorie.items[self.drop_down_PriceCategorie.selected_value - 1][0], self.drop_down_PriceCategorie.selected_value]
+    print(self.current_pricecategorie)
+
+
+    
     
     

@@ -24,13 +24,47 @@ def get_jugendherbergen(row="*"):
   conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
   cursor = conn.cursor()
   res = list(cursor.execute(f"SELECT {row} FROM jugendherbergen"))
-  print(res)
   return res
   
 @anvil.server.callable
 def get_zimmer_for_jugendherberge(jid, columns="*"):
   conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
   cursor = conn.cursor()
-  res = list(cursor.execute(f"SELECT {columns} FROM zimmer WHERE JID={int(jid)}"))
+  res = list(cursor.execute(
+        f"""
+        SELECT 
+            'Zimmernummer: ' || zimmernummer || ', ' ||
+            'Bettenanzahl: ' || bettenanzahl || ', ' ||
+            'Preis/Nacht: ' || preis_pro_nacht || ', ' ||
+            ZID 
+        FROM zimmer 
+        WHERE JID = {int(jid)}
+        """
+    ))
   return res
+
+@anvil.server.callable
+def get_Gast():
+  conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
+  cursor = conn.cursor()
+  res = list(cursor.execute("Select Benutzername,GID from Gast"))
+  return res
+
+@anvil.server.callable
+def get_Preiskategorie():
+  conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
+  cursor = conn.cursor()
+  res = list(cursor.execute("Select PreisVon, PreisBis, PID from Preiskategorie"))
+  price_ranges = [(f"{row[0]} - {row[1]}", row[2]) for row in res]
+  return price_ranges
+
+@anvil.server.callable
+def get_More_user(Username):
+  conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
+  cursor = conn.cursor()
+  res = list(cursor.execute(f"Select Benutzername, GID from Gast where Benutzername <> '{Username}'"))
+  return res
+
+
+
   
