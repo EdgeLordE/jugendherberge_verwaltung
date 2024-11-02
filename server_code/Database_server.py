@@ -63,6 +63,13 @@ def get_More_user(Username):
   res = list(cursor.execute(f"Select Benutzername, GID from Gast where Benutzername <> '{Username}'"))
   return res
 
+@anvil.server.callable
+def get_room_sleep_Place(zid):
+  conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
+  cursor = conn.cursor()
+  res = list(cursor.execute(f"Select bettenanzahl from zimmer where ZID={int(zid)}"))
+  return res
+
 
 
   

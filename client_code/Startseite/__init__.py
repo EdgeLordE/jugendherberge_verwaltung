@@ -12,6 +12,13 @@ class Startseite(StartseiteTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
+    today = datetime.now().date()
+    
+    # Min-Datum für Start- und Enddatum setzen
+    self.date_picker_StartDate.min_date = today
+    self.date_picker_EndDate.min_date = today
+
+    
     # Any code you write here will run before the form opens.
     self.drop_down_City.items = anvil.server.call("get_jugendherbergen", "name, JID")
     self.drop_down_User.items = anvil.server.call('get_Gast')
@@ -84,8 +91,14 @@ class Startseite(StartseiteTemplate):
 
   def outlined_button_1_click(self, **event_args):
     """This method is called when the button is clicked"""
-    self.current_more_user.append(self.drop_down_MoreUser.selected_value)
-    print(self.current_more_user)
+    
+    if len(set(self.current_more_user)) + 1 >= anvil.server.call('get_room_sleep_Place', self.drop_down_Room.selected_value)[0][0]:
+      alert("Die maximale Anzahl an Leuten in dem Zimmer wurde erreicht.")
+      print(set(self.current_more_user))
+    else:
+      self.current_more_user.append(self.drop_down_MoreUser.selected_value)
+    
+    
 
   def outlined_button_2_click(self, **event_args):
     """This method is called when the button is clicked"""
