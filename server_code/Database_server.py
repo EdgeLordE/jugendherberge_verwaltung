@@ -106,6 +106,14 @@ def update_room_book(zid, number):
 def get_latest_bid():
     conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
     cursor = conn.cursor()
-    cursor.execute("SELECT MAX(BID) FROM Buchung")  # Assuming BID is an auto-increment column
+    cursor.execute("SELECT MAX(BID) FROM Buchung")  
     latest_bid = cursor.fetchone()[0]
     return latest_bid
+
+@anvil.server.callable
+def get_room_number(zid):
+  conn = sqlite3.connect(data_files['jugendherbergen_verwaltung.db'])
+  cursor = conn.cursor()
+  res = list(cursor.execute(f"select zimmernummer from zimmer where ZID={int(zid)}"))
+  return res
+  
